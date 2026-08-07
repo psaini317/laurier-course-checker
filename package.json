@@ -1,0 +1,15 @@
+{
+  "name": "laurier-course-checker",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Checks LORIS for course seat availability and emails an alert when a seat opens up.",
+  "type": "module",
+  "scripts": {
+    "check": "node src/checkAvailability.js"
+  },
+  "dependencies": {
+    "fetch-cookie": "^3.0.1",
+    "resend": "^4.0.1",
+    "tough-cookie": "^5.0.0"
+  }
+}
