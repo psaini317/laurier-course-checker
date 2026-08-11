@@ -2,14 +2,10 @@ name: Check course availability
 
 on:
   schedule:
-    # Cron's minute field repeats every hour, so "every 45 min" can't be a
-    # single expression (45 doesn't divide 60). These three lines form a
-    # repeating 3-hour cycle — :07, :52, :37, :22, then :07 again 3h later —
-    # landing exactly 45 minutes apart throughout, off the peak :00/:15/:30/:45
-    # minutes other scheduled workflows tend to pile onto.
-    - cron: "7,52 */3 * * *"
-    - cron: "37 1-23/3 * * *"
-    - cron: "22 2-23/3 * * *"
+    # Every 15 min, offset from :00/:15/:30/:45 to avoid the peak-minute
+    # queuing delays other scheduled workflows pile onto. No minutes-budget
+    # concern here since this repo is public (unlimited free Actions minutes).
+    - cron: "7,22,37,52 * * * *"
   workflow_dispatch: {}
 
 permissions:
