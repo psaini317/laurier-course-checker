@@ -11,18 +11,26 @@ export async function sendAvailabilityEmail(opened) {
   const from = process.env.FROM_EMAIL || "onboarding@resend.dev";
 
   const rows = opened
-    .map(
-      (s) =>
+    .map((s) => {
+      const kinds = [];
+      if (s.seatOpened) kinds.push(`${s.seatsAvailable} class seat(s)`);
+      if (s.waitlistOpened) kinds.push(`${s.waitAvailable} waitlist spot(s)`);
+      return (
         `<li><b>${s.subjectCourse} (${s.sequenceNumber})</b> — ${s.courseTitle}: ` +
-        `${s.seatsAvailable} seat(s) open, ${s.waitAvailable} waitlist spot(s) open ` +
+        `${kinds.join(" and ")} just opened up ` +
         `(CRN ${s.crn}, ${s.termName})</li>`
-    )
+      );
+    })
     .join("");
+
+  const anySeat = opened.some((s) => s.seatOpened);
+  const anyWaitlist = opened.some((s) => s.waitlistOpened);
+  const subjectKind = anySeat && anyWaitlist ? "Seat/waitlist" : anySeat ? "Seat" : "Waitlist spot";
 
   await resend.emails.send({
     from,
     to,
-    subject: `Seat open: ${opened.map((s) => s.subjectCourse).join(", ")}`,
-    html: `<p>A seat just opened up:</p><ul>${rows}</ul><p>Register on <a href="https://loris.wlu.ca">LORIS</a> now.</p>`,
+    subject: `${subjectKind} open: ${opened.map((s) => s.subjectCourse).join(", ")}`,
+    html: `<p>Availability just changed:</p><ul>${rows}</ul><p>Register on <a href="https://loris.wlu.ca">LORIS</a> now.</p>`,
   });
 }

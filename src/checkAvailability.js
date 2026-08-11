@@ -23,11 +23,11 @@ async function main() {
       nextState[key] = { seatsAvailable: s.seatsAvailable, waitAvailable: s.waitAvailable };
 
       const prev = prevState[key];
-      const wasClosed = !prev || (prev.seatsAvailable <= 0 && prev.waitAvailable <= 0);
-      const isOpenNow = s.seatsAvailable > 0 || s.waitAvailable > 0;
+      const seatOpened = (!prev || prev.seatsAvailable <= 0) && s.seatsAvailable > 0;
+      const waitlistOpened = (!prev || prev.waitAvailable <= 0) && s.waitAvailable > 0;
 
-      if (wasClosed && isOpenNow) {
-        opened.push({ ...s, termName });
+      if (seatOpened || waitlistOpened) {
+        opened.push({ ...s, termName, seatOpened, waitlistOpened });
       }
       console.log(
         `${s.subjectCourse} ${s.sequenceNumber} (CRN ${s.crn}): ` +
