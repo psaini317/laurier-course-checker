@@ -1,10 +1,10 @@
 {
   "202701:36": {
-    "seatsAvailable": 6,
-    "waitAvailable": 11
+    "seatsAvailable": 5,
+    "waitAvailable": 12
   },
   "202701:4379": {
-    "seatsAvailable": 58,
+    "seatsAvailable": 57,
     "waitAvailable": 17
   }
 }
